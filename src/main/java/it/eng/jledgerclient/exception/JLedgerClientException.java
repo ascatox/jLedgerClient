@@ -1,4 +1,4 @@
-package it.eng.ledger.exception;
+package it.eng.jledgerclient.exception;
 
 
 public class JLedgerClientException extends Exception {

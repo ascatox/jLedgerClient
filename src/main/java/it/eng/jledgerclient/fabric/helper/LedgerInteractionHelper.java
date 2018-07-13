@@ -1,8 +1,8 @@
-package it.eng.ledger.fabric.helper;
+package it.eng.jledgerclient.fabric.helper;
 
-import it.eng.ledger.blockchain.fabric.config.*;
-import it.eng.ledger.exception.JLedgerClientException;
-import it.eng.ledger.fabric.config.*;
+import it.eng.jledgerclient.blockchain.fabric.config.*;
+import it.eng.jledgerclient.exception.JLedgerClientException;
+import it.eng.jledgerclient.fabric.config.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.protos.peer.Query;

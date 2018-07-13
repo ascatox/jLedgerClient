@@ -1,8 +1,8 @@
-package it.eng.ledger.fabric.config;
+package it.eng.jledgerclient.fabric.config;
 
-import it.eng.ledger.fabric.utils.Utils;
-import it.eng.ledger.fabric.helper.ChannelInitializationManager;
-import it.eng.ledger.exception.JLedgerClientException;
+import it.eng.jledgerclient.fabric.utils.Utils;
+import it.eng.jledgerclient.fabric.helper.ChannelInitializationManager;
+import it.eng.jledgerclient.exception.JLedgerClientException;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

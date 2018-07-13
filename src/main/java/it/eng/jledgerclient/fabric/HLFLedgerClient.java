@@ -1,15 +1,15 @@
-package it.eng.ledger.fabric;
+package it.eng.jledgerclient.fabric;
 
-import it.eng.ledger.exception.JLedgerClientException;
-import it.eng.ledger.fabric.config.ConfigManager;
-import it.eng.ledger.fabric.config.Configuration;
-import it.eng.ledger.fabric.config.Organization;
-import it.eng.ledger.fabric.helper.InvokeReturn;
-import it.eng.ledger.fabric.helper.LedgerInteractionHelper;
-import it.eng.ledger.fabric.helper.QueryReturn;
+import it.eng.jledgerclient.exception.JLedgerClientException;
+import it.eng.jledgerclient.fabric.config.ConfigManager;
+import it.eng.jledgerclient.fabric.config.Configuration;
+import it.eng.jledgerclient.fabric.config.Organization;
+import it.eng.jledgerclient.fabric.helper.InvokeReturn;
+import it.eng.jledgerclient.fabric.helper.LedgerInteractionHelper;
+import it.eng.jledgerclient.fabric.helper.QueryReturn;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import it.eng.ledger.fabric.base.LedgerClient;
+import it.eng.jledgerclient.fabric.base.LedgerClient;
 import org.hyperledger.fabric.sdk.ChaincodeEventListener;
 
 import java.util.ArrayList;

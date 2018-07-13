@@ -1,4 +1,4 @@
-package it.eng.ledger.fabric.config;
+package it.eng.jledgerclient.fabric.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hyperledger.fabric.sdk.ChaincodeID;

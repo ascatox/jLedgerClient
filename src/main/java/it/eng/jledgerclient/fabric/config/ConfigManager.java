@@ -1,7 +1,7 @@
-package it.eng.ledger.fabric.config;
+package it.eng.jledgerclient.fabric.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.eng.ledger.exception.JLedgerClientException;
+import it.eng.jledgerclient.exception.JLedgerClientException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;

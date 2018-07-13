@@ -1,4 +1,4 @@
-package it.eng.ledger.fabric.base;
+package it.eng.jledgerclient.fabric.base;
 
 /**
  * @author ascatox

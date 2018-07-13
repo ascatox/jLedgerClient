@@ -1,4 +1,4 @@
-package it.eng.ledger.fabric.utils;
+package it.eng.jledgerclient.fabric.utils;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import it.eng.ledger.exception.JLedgerClientException;
+import it.eng.jledgerclient.exception.JLedgerClientException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

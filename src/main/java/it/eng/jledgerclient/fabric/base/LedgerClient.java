@@ -1,7 +1,7 @@
-package it.eng.ledger.fabric.base;
+package it.eng.jledgerclient.fabric.base;
 
 
-import it.eng.ledger.exception.JLedgerClientException;
+import it.eng.jledgerclient.exception.JLedgerClientException;
 import org.hyperledger.fabric.sdk.ChaincodeEventListener;
 
 import java.util.List;

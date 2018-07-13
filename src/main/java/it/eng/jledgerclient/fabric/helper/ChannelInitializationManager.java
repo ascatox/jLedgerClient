@@ -1,9 +1,9 @@
-package it.eng.ledger.fabric.helper;
+package it.eng.jledgerclient.fabric.helper;
 
 
 
-import it.eng.ledger.fabric.config.ConfigManager;
-import it.eng.ledger.exception.JLedgerClientException;
+import it.eng.jledgerclient.fabric.config.ConfigManager;
+import it.eng.jledgerclient.exception.JLedgerClientException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.Channel;
@@ -12,9 +12,9 @@ import org.hyperledger.fabric.sdk.HFClient;
 import org.hyperledger.fabric.sdk.Peer;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.exception.TransactionException;
-import it.eng.ledger.fabric.config.OrdererConfig;
-import it.eng.ledger.fabric.config.Organization;
-import it.eng.ledger.fabric.config.PeerConfig;
+import it.eng.jledgerclient.fabric.config.OrdererConfig;
+import it.eng.jledgerclient.fabric.config.Organization;
+import it.eng.jledgerclient.fabric.config.PeerConfig;
 
 import java.util.LinkedList;
 import java.util.List;
