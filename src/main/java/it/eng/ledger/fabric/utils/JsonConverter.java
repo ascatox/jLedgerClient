@@ -1,4 +1,4 @@
-package it.eng.ledger.blockchain.fabric.utils;
+package it.eng.ledger.fabric.utils;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;

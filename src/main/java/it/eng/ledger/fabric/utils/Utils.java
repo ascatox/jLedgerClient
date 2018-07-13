@@ -14,7 +14,7 @@
  *
  */
 
-package it.eng.ledger.blockchain.fabric.utils;
+package it.eng.ledger.fabric.utils;
 
 
 

@@ -1,4 +1,4 @@
-package it.eng.ledger.blockchain.fabric.base;
+package it.eng.ledger.fabric.base;
 
 
 import it.eng.ledger.exception.JLedgerClientException;

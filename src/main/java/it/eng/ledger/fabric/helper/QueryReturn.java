@@ -1,4 +1,4 @@
-package it.eng.ledger.blockchain.fabric.helper;
+package it.eng.ledger.fabric.helper;
 
 /**
  * @author ascatox

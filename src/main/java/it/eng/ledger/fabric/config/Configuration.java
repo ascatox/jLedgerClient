@@ -1,4 +1,4 @@
-package it.eng.ledger.blockchain.fabric.config;
+package it.eng.ledger.fabric.config;
 
 import org.apache.commons.lang3.StringUtils;
 

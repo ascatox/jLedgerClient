@@ -1,4 +1,4 @@
-package it.eng.ledger.blockchain.fabric.config;
+package it.eng.ledger.fabric.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

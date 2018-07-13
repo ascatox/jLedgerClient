@@ -1,7 +1,6 @@
-package it.eng.ledger.blockchain.fabric.helper;
+package it.eng.ledger.fabric.helper;
 
-import it.eng.ledger.blockchain.fabric.config.Chaincode;
-import it.eng.ledger.blockchain.fabric.config.Configuration;
+import it.eng.ledger.fabric.config.Chaincode;
 import it.eng.ledger.exception.JLedgerClientException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;

@@ -1,6 +1,6 @@
-package it.eng.ledger.blockchain.fabric.base;
+package it.eng.ledger.fabric.base;
 
-import it.eng.ledger.blockchain.fabric.HLFLedgerClient;
+import it.eng.ledger.fabric.HLFLedgerClient;
 import it.eng.ledger.exception.JLedgerClientException;
 
 import java.util.Properties;

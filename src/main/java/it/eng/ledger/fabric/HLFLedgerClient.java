@@ -1,24 +1,20 @@
-package it.eng.ledger.blockchain.fabric;
+package it.eng.ledger.fabric;
 
 import it.eng.ledger.exception.JLedgerClientException;
-import it.eng.ledger.blockchain.fabric.config.ConfigManager;
-import it.eng.ledger.blockchain.fabric.config.Configuration;
-import it.eng.ledger.blockchain.fabric.config.Organization;
-import it.eng.ledger.blockchain.fabric.helper.InvokeReturn;
-import it.eng.ledger.blockchain.fabric.helper.LedgerInteractionHelper;
-import it.eng.ledger.blockchain.fabric.helper.QueryReturn;
+import it.eng.ledger.fabric.config.ConfigManager;
+import it.eng.ledger.fabric.config.Configuration;
+import it.eng.ledger.fabric.config.Organization;
+import it.eng.ledger.fabric.helper.InvokeReturn;
+import it.eng.ledger.fabric.helper.LedgerInteractionHelper;
+import it.eng.ledger.fabric.helper.QueryReturn;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import it.eng.ledger.blockchain.fabric.base.LedgerClient;
-import org.hyperledger.fabric.sdk.BlockEvent;
-import org.hyperledger.fabric.sdk.ChaincodeEvent;
+import it.eng.ledger.fabric.base.LedgerClient;
 import org.hyperledger.fabric.sdk.ChaincodeEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 final public class HLFLedgerClient implements LedgerClient {
 
