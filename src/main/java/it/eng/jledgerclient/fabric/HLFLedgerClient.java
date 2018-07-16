@@ -9,14 +9,13 @@ import it.eng.jledgerclient.fabric.helper.LedgerInteractionHelper;
 import it.eng.jledgerclient.fabric.helper.QueryReturn;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import it.eng.jledgerclient.fabric.base.LedgerClient;
 import org.hyperledger.fabric.sdk.ChaincodeEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-final public class HLFLedgerClient implements LedgerClient {
+final public class HLFLedgerClient {
 
     private final static Logger log = LogManager.getLogger(HLFLedgerClient.class);
 
