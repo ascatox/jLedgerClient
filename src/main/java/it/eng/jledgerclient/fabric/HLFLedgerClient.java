@@ -79,11 +79,11 @@ public class HLFLedgerClient {
     }
 
 
-    public String doRegisterEvents(String eventName, ChaincodeEventListener chaincodeEventListener) throws JLedgerClientException {
+    public String doRegisterEvent(String eventName, ChaincodeEventListener chaincodeEventListener) throws JLedgerClientException {
         return ledgerInteractionHelper.getEventHandler().register(eventName, chaincodeEventListener);
     }
 
-    public void doUnregisterEvents(String chaincodeEventListenerHandle) throws JLedgerClientException {
+    public void doUnregisterEvent(String chaincodeEventListenerHandle) throws JLedgerClientException {
         ledgerInteractionHelper.getEventHandler().unregister(chaincodeEventListenerHandle);
     }
 
