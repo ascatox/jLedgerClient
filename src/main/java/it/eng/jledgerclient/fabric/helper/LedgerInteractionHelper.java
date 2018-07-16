@@ -1,6 +1,5 @@
 package it.eng.jledgerclient.fabric.helper;
 
-import it.eng.jledgerclient.blockchain.fabric.config.*;
 import it.eng.jledgerclient.exception.JLedgerClientException;
 import it.eng.jledgerclient.fabric.config.*;
 import org.apache.logging.log4j.LogManager;
