@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-final public class HLFLedgerClient {
+public class HLFLedgerClient {
 
     private final static Logger log = LogManager.getLogger(HLFLedgerClient.class);
 
