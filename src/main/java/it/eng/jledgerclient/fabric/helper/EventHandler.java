@@ -54,7 +54,7 @@ public class EventHandler {
         }
     }
 
-    private Vector<ChaincodeEventCapture> chaincodeEvents = new Vector<>(); // Test list to capture chaincode events.
+    //private Vector<ChaincodeEventCapture> chaincodeEvents = new Vector<>(); // Test list to capture chaincode events.
 
     public String register(String eventName, ChaincodeEventListener chaincodeEventListener) throws JLedgerClientException {
         try {
@@ -62,7 +62,7 @@ public class EventHandler {
             String event = EXPECTED_EVENT_NAME;
             if (StringUtils.isNotEmpty(eventName))
                 event = eventName;
-            String chaincodeEventListenerHandle = channel.registerChaincodeEventListener(Pattern.compile(chaincode.getName()),
+            String chaincodeEventListenerHandle = channel.registerChaincodeEventListener(Pattern.compile(".*"),
                     Pattern.compile(Pattern.quote(event)), chaincodeEventListener
 
                     /*(handle, blockEvent, chaincodeEvent) -> {
@@ -86,9 +86,9 @@ public class EventHandler {
         }
     }
 
-    public Vector<ChaincodeEventCapture> getChaincodeEvents() {
-        return chaincodeEvents;
-    }
+//    public Vector<ChaincodeEventCapture> getChaincodeEvents() {
+//        return chaincodeEvents;
+//    }
 
     public void unregister(String chaincodeEventListenerHandle) throws JLedgerClientException {
         try {
