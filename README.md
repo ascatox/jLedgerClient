@@ -1,4 +1,4 @@
-# jLedgerClient 1.05
+# jLedgerClient v1.05
 
 ## Step 1
 
