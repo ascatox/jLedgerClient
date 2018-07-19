@@ -24,7 +24,7 @@ Java 8 and Maven installed in your environment.
 	    <version>1.0.5</version>
    </dependency>
   ``` 
-3. Copy under the folder `resources` the `crypto-config` dir coming from your Fabric installation and create a `config-fabric-network.json` in order to connect the client to your HLF installation. A file [example](https://github.com/ascatox/jLedgerClient/blob/master/src/test/resources/config-fabric-network.json) is available in the `test` folder of the project.
+3. Copy under the folder `resources` the `crypto-config` dir coming from your Fabric installation and create a `config-fabric-network.json` in order to connect the client to your HLF installation. <br/> A file [example](https://github.com/ascatox/jLedgerClient/blob/master/src/test/resources/config-fabric-network.json) is available in the `test` folder of the project.
 
 ## Usage
 ### HLFLedgerClient
