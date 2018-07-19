@@ -54,7 +54,7 @@ public String doInvoke(String fcn, List<String> args) throws JLedgerClientExcept
     }
    ```
    
-This method needs **two** arguments, the *first* is the name of the function we want to invoke in the chaincode. The *second* is the list of args that we want to pass to the chaincode function. <br>
+This method needs **two** arguments, the **first** is the name of the function we want to invoke in the chaincode. The **second** is the list of args that we want to pass to the chaincode function. <br>
 **doInvoke** returns a string. <br>
 **Example** <br>
 `final String payload = hlfledgerclient.doInvoke(fcn , args);` <br>
