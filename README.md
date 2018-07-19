@@ -1,6 +1,8 @@
 # jLedgerClient v1.05
 
-## Step 1
+## Installation
+### Prerequisites
+Java 8 and Maven installed in your environment.
 
 1. Add the JitPack repository to your build file <br>
 
@@ -22,8 +24,9 @@
 	    <version>1.0.5</version>
    </dependency>
   ``` 
+3. Copy under the folder `resources` the `crypto-config` dir coming from your Fabric installation and create a `config-fabric-network.json` in order to connect the client to your HLF installation. A file [example](https://github.com/ascatox/jLedgerClient/blob/master/src/test/resources/config-fabric-network.json) is available in the `test` folder of the project.
 
-## Step 2
+## Usage
 ### HLFLedgerClient
 
 In your project crate a class that `extends` HLFLedgerClient. <br>
