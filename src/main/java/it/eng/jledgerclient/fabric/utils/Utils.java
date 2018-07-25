@@ -17,7 +17,6 @@
 package it.eng.jledgerclient.fabric.utils;
 
 
-
 import it.eng.jledgerclient.exception.JLedgerClientException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -48,10 +47,10 @@ public class Utils {
 
     public static void getMessageViolations(Set<ConstraintViolation<?>> violations) throws JLedgerClientException {
         if (violations.isEmpty())
-            return ;
+            return;
         StringBuilder messageBuilder = new StringBuilder();
         for (ConstraintViolation violation : violations) {
-            messageBuilder.append(violation.getPropertyPath()+ ": " +violation.getMessage() +"; ");
+            messageBuilder.append(violation.getPropertyPath() + ": " + violation.getMessage() + "; ");
         }
         if (StringUtils.isNotEmpty(messageBuilder.toString()))
             throw new JLedgerClientException(messageBuilder.toString());
@@ -59,10 +58,10 @@ public class Utils {
 
     public static void getMessageViolationsResult(Set<ConstraintViolation<?>> violations) throws JLedgerClientException {
         if (violations.isEmpty())
-            return ;
+            return;
         StringBuilder messageBuilder = new StringBuilder();
         for (ConstraintViolation violation : violations) {
-            messageBuilder.append(violation.getPropertyPath()+ ": " +violation.getMessage() +"; ");
+            messageBuilder.append(violation.getPropertyPath() + ": " + violation.getMessage() + "; ");
         }
         if (StringUtils.isNotEmpty(messageBuilder.toString()))
             throw new JLedgerClientException(messageBuilder.toString());
@@ -70,7 +69,7 @@ public class Utils {
 
 
     public static File findFileSk(String domainName, String user, String cryptoDir) {
-        File directory = getSkConfigPath(domainName,user, cryptoDir);
+        File directory = getSkConfigPath(domainName, user, cryptoDir);
 
         File[] matches = directory.listFiles((dir, name) -> name.endsWith("_sk"));
 
@@ -89,14 +88,14 @@ public class Utils {
     public static File getSkConfigPath(String domainName, String user, String cryptoDir) {
         return Paths.get(cryptoDir,
                 "/peerOrganizations/",
-                domainName, format("/users/"+user+"@%s/msp/keystore", domainName))
+                domainName, format("/users/" + user + "@%s/msp/keystore", domainName))
                 .toFile();
     }
 
     public static File getCertConfigPath(String domainName, String user, String cryptoDir) {
         return Paths.get(cryptoDir, "/peerOrganizations/",
                 domainName,
-                format("/users/Admin@%s/msp/signcerts/"+user+"@%s-cert.pem", domainName,
+                format("/users/" + user + "@%s/msp/signcerts/" + user + "@%s-cert.pem", domainName,
                         domainName)).toFile();
     }
 
