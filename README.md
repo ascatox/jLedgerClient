@@ -1,4 +1,4 @@
-# jLedgerClient v1.05
+# jLedgerClient
 
 ## Installation
 ### Prerequisites
