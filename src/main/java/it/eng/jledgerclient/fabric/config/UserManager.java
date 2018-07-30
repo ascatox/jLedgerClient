@@ -4,9 +4,11 @@ import it.eng.jledgerclient.fabric.utils.Utils;
 import it.eng.jledgerclient.fabric.helper.ChannelInitializationManager;
 import it.eng.jledgerclient.exception.JLedgerClientException;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
+import org.hyperledger.fabric_ca.sdk.exception.EnrollmentException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,7 +50,7 @@ public class UserManager {
         try {
             Set<User> users = organization.getUsers();
             for (User user : users) {
-               doCompleteUser(user);
+                doCompleteUser(user);
             }
         } catch (IOException | NoSuchProviderException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             log.error(e);
@@ -57,13 +59,35 @@ public class UserManager {
     }
 
 
-    private void doCompleteUser(User user) throws IOException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
+    private void doCompleteUser(User user) throws IOException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException, JLedgerClientException {
         user.setMspId(organization.getMspID());
-        File certConfigPath = Utils.getCertConfigPath(organization.getDomainName(), user.getName(), configuration.getCryptoconfigdir());
-        String certificate = new String(IOUtils.toByteArray(new FileInputStream(certConfigPath)), ConfigManager.UTF_8);
-        File fileSk = Utils.findFileSk(organization.getDomainName(), user.getName(), configuration.getCryptoconfigdir());
-        PrivateKey privateKey = Utils.getPrivateKeyFromBytes(IOUtils.toByteArray(new FileInputStream(fileSk)));
-        user.setEnrollment(new Enrollment(privateKey, certificate));
+        if (user.getRoles().contains("admin")
+                || user.getRoles().contains("Admin")) {
+            File certConfigPath = Utils.getCertConfigPath(organization.getDomainName(), user.getName(), configuration.getCryptoconfigdir());
+            String certificate = new String(IOUtils.toByteArray(new FileInputStream(certConfigPath)), ConfigManager.UTF_8);
+            File fileSk = Utils.findFileSk(organization.getDomainName(), user.getName(), configuration.getCryptoconfigdir());
+            PrivateKey privateKey = Utils.getPrivateKeyFromBytes(IOUtils.toByteArray(new FileInputStream(fileSk)));
+            user.setEnrollment(new Enrollment(privateKey, certificate));
+        } else {
+            enrollUser(user, organization.getCa());
+        }
+    }
+
+
+    private void enrollUser(User user, Ca ca) throws JLedgerClientException {
+        try {
+            if (StringUtils.isEmpty(user.getSecret()) || null == ca) {
+                throw new JLedgerClientException("Secret for user: " + user.getName() + " not given or error in CA retrieving!!!");
+            }
+            final org.hyperledger.fabric.sdk.Enrollment enrollment = ca.getCaClient().enroll(user.getName(), user.getSecret());
+            if (null == enrollment) {
+                throw new JLedgerClientException("User: " + user.getName() + " not correctly enrolled or problems enrolling!!!");
+
+            }
+            user.setEnrollment(new Enrollment(enrollment.getKey(), enrollment.getCert()));
+        } catch (EnrollmentException | org.hyperledger.fabric_ca.sdk.exception.InvalidArgumentException e) {
+            throw new JLedgerClientException(e);
+        }
     }
 
 

@@ -15,6 +15,7 @@ public class User implements org.hyperledger.fabric.sdk.User{
     private String affiliation;
     private Enrollment enrollment;
     private String mspId;
+    private String secret;
 
     public User() {
     }
@@ -80,6 +81,14 @@ public class User implements org.hyperledger.fabric.sdk.User{
     @JsonIgnore
     public void setMspId(String mspId) {
         this.mspId = mspId;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
 
     @Override

@@ -35,6 +35,7 @@
       "users": [
         {
           "name": "Admin",
+          "secret": "faredge2018",
           "roles": [
             "admin"
           ]

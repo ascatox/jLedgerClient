@@ -58,7 +58,7 @@ public class ChannelInitializationManager {
         this.configManager = configManager;
         this.organization = organization;
         //Only peer Admin org
-        client.setUserContext(organization.getPeerAdminUser());
+        client.setUserContext(organization.getLoggedUser());
         if (null == getChannel())
             this.channel = client.getChannel(configManager.getConfiguration().getChannelName());
         if (channel == null) {
