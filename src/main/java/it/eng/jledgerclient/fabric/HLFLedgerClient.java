@@ -17,10 +17,10 @@ import java.util.concurrent.TimeUnit;
 
 public class HLFLedgerClient {
 
-    private final static Logger log = LogManager.getLogger(HLFLedgerClient.class);
+    protected final static Logger log = LogManager.getLogger(HLFLedgerClient.class);
 
-    private LedgerInteractionHelper ledgerInteractionHelper;
-    private ConfigManager configManager;
+    protected LedgerInteractionHelper ledgerInteractionHelper;
+    protected ConfigManager configManager;
 
     public HLFLedgerClient() throws JLedgerClientException {
         doLedgerClient();
