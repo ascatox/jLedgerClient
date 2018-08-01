@@ -61,8 +61,7 @@ public class UserManager {
 
     private void doCompleteUser(User user) throws IOException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException, JLedgerClientException {
         user.setMspId(organization.getMspID());
-        if (user.getRoles().contains("admin")
-                || user.getRoles().contains("Admin")) {
+        if (user.isAdmin()) {
             File certConfigPath = Utils.getCertConfigPath(organization.getDomainName(), user.getName(), configuration.getCryptoconfigdir());
             String certificate = new String(IOUtils.toByteArray(new FileInputStream(certConfigPath)), ConfigManager.UTF_8);
             File fileSk = Utils.findFileSk(organization.getDomainName(), user.getName(), configuration.getCryptoconfigdir());

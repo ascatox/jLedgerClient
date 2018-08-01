@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * @author ascatox
  */
-public class User implements org.hyperledger.fabric.sdk.User{
+public class User implements org.hyperledger.fabric.sdk.User {
 
     private String name;
     private Set<String> roles;
@@ -110,5 +110,21 @@ public class User implements org.hyperledger.fabric.sdk.User{
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (mspId != null ? mspId.hashCode() : 0);
         return result;
+    }
+
+    @JsonIgnore
+    public boolean isAdmin() {
+        if (getRoles().contains("admin")
+                || getRoles().contains("Admin"))
+            return true;
+        return false;
+    }
+
+    @JsonIgnore
+    public boolean isPeer() {
+        if (getRoles().contains("peer")
+                || getRoles().contains("Peer"))
+            return true;
+        return false;
     }
 }

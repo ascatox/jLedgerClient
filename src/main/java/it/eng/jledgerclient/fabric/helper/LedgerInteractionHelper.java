@@ -71,17 +71,19 @@ final public class LedgerInteractionHelper {
     }
 
     public void controlInstalledChaincodeOnPeers(Chaincode chaincode) throws JLedgerClientException {
-        log.debug("Checking installed chaincode on all peer: %s, at version: %s, on peer: %s", chaincode.getName(), chaincode.getVersion(), channel.getPeers());
-        for (Peer peer : channel.getPeers()) {
-            try {
-                if (!checkInstalledChaincode(peer, chaincode)) {
+        if (this.organization.getLoggedUser().isAdmin()) {
+            log.debug("Checking installed chaincode on all peer: %s, at version: %s, on peer: %s", chaincode.getName(), chaincode.getVersion(), channel.getPeers());
+            for (Peer peer : channel.getPeers()) {
+                try {
+                    if (!checkInstalledChaincode(peer, chaincode)) {
+                        throw new JLedgerClientException(format("Peer %s is missing chaincode whith name: %s, path: %s, version: %s",
+                                peer.getName(), chaincode.getName(), chaincode.getPath(), chaincode.getVersion()));
+                    }
+                } catch (JLedgerClientException e) {
+                    log.error(e);
                     throw new JLedgerClientException(format("Peer %s is missing chaincode whith name: %s, path: %s, version: %s",
                             peer.getName(), chaincode.getName(), chaincode.getPath(), chaincode.getVersion()));
                 }
-            } catch (JLedgerClientException e) {
-                log.error(e);
-                throw new JLedgerClientException(format("Peer %s is missing chaincode whith name: %s, path: %s, version: %s",
-                        peer.getName(), chaincode.getName(), chaincode.getPath(), chaincode.getVersion()));
             }
         }
     }
@@ -113,16 +115,18 @@ final public class LedgerInteractionHelper {
     }
 
     public void controlInstantiatedChaincodeOnPeers(Chaincode chaincode) throws JLedgerClientException {
-        log.debug("Checking installed chaincode on all peer: %s, at version: %s, on peer: %s", chaincode.getName(), chaincode.getVersion(), channel.getPeers());
-        for (Peer peer : channel.getPeers()) {
-            if (!checkInstantiatedChaincode(peer, chaincode)) {
-                try {
-                    throw new JLedgerClientException(format("Peer %s has not installed chaincode with name: %s, path: %s, version: %s",
-                            peer.getName(), chaincode.getName(), chaincode.getPath(), chaincode.getVersion()));
-                } catch (JLedgerClientException e) {
-                    log.error(e);
-                    throw new JLedgerClientException(format("Peer %s has not installed chaincode with name: %s, path: %s, version: %s",
-                            peer.getName(), chaincode.getName(), chaincode.getPath(), chaincode.getVersion()));
+        if (this.organization.getLoggedUser().isAdmin()) {
+            log.debug("Checking installed chaincode on all peer: %s, at version: %s, on peer: %s", chaincode.getName(), chaincode.getVersion(), channel.getPeers());
+            for (Peer peer : channel.getPeers()) {
+                if (!checkInstantiatedChaincode(peer, chaincode)) {
+                    try {
+                        throw new JLedgerClientException(format("Peer %s has not installed chaincode with name: %s, path: %s, version: %s",
+                                peer.getName(), chaincode.getName(), chaincode.getPath(), chaincode.getVersion()));
+                    } catch (JLedgerClientException e) {
+                        log.error(e);
+                        throw new JLedgerClientException(format("Peer %s has not installed chaincode with name: %s, path: %s, version: %s",
+                                peer.getName(), chaincode.getName(), chaincode.getPath(), chaincode.getVersion()));
+                    }
                 }
             }
         }
