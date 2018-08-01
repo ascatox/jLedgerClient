@@ -3,7 +3,7 @@
   "type": "hlfv1.1",
   "channelName": "ledgerchannel",
   "timeout": 5000,
-  "cryptoconfigdir": "/home/claudio/Scrivania/crypto-config",
+  "cryptoconfigdir": "",
   "tls": false,
   "chaincode": {
     "path": "analitics-chaincode",
@@ -18,18 +18,18 @@
       "peers": [
         {
           "name": "peer0.org1.example.com",
-          "requestURL": "grpc://167.99.89.178:7051",
-          "eventURL": "grpc://167.99.89.178:7053"
+          "requestURL": "grpc://localhost",
+          "eventURL": "grpc://localhost:7053"
         }
       ],
       "ca": {
-        "url": "http://167.99.89.178:7054",
+        "url": "http://localhost:7054",
         "name": "ca.example.com"
       },
       "orderers": [
         {
           "name": "orderer.example.com",
-          "url": "grpc://167.99.89.178:7050"
+          "url": "grpc://localhost:7050"
         }
       ],
       "users": [
