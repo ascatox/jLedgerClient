@@ -38,6 +38,7 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+import java.util.HashSet;
 import java.util.Set;
 
 import static java.lang.String.format;
@@ -104,7 +105,7 @@ public class Utils {
                     format("/users/" + user.getName() + "@%s/msp/signcerts/" + user.getName() + "@%s-cert.pem", domainName,
                             domainName)).toFile();
         return Paths.get(cryptoDir,
-                domainName, user.getName(), "@%s-cert.pem").toFile();
+                domainName, user.getName(), "ca-cert.pem").toFile();
     }
 
     public static PrivateKey getPrivateKeyFromBytes(byte[] data) throws IOException, NoSuchProviderException,
@@ -123,5 +124,14 @@ public class Utils {
         return privateKey;
     }
 
+    public static void main(String[] args) {
+        User user = new User();
+        user.setName("test2");
+        Set roles = new HashSet();
+        roles.add("user");
+        user.setRoles(roles);
+        System.out.println(getCertConfigPath("org1.example.com", user, "/Users/ascatox/Desktop/crypto-users"));
+        System.out.println(findFileSk("org1.example.com", user, "/Users/ascatox/Desktop/crypto-users").getAbsoluteFile());
+    }
 
 }
