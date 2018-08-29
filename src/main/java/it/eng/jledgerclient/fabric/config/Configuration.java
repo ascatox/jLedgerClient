@@ -66,7 +66,7 @@ public class Configuration {
 
     public String getCryptoconfigdir() {
         if (StringUtils.isEmpty(cryptoconfigdir))
-            this.setCryptoconfigdir(System.getProperty("user.home") + "/crypto-config");
+            this.setCryptoconfigdir(System.getProperty("user.home") + "/crypto-users");
         return cryptoconfigdir;
     }
 
