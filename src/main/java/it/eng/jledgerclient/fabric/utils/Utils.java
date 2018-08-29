@@ -18,6 +18,7 @@ package it.eng.jledgerclient.fabric.utils;
 
 
 import it.eng.jledgerclient.exception.JLedgerClientException;
+import it.eng.jledgerclient.fabric.config.User;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -68,7 +69,7 @@ public class Utils {
     }
 
 
-    public static File findFileSk(String domainName, String user, String cryptoDir) {
+    public static File findFileSk(String domainName, User user, String cryptoDir) {
         File directory = getSkConfigPath(domainName, user, cryptoDir);
 
         File[] matches = directory.listFiles((dir, name) -> name.endsWith("_sk"));
@@ -85,18 +86,25 @@ public class Utils {
         return matches[0];
     }
 
-    public static File getSkConfigPath(String domainName, String user, String cryptoDir) {
+    private static File getSkConfigPath(String domainName, User user, String cryptoDir) {
+        if (user.isAdmin())
+            return Paths.get(cryptoDir,
+                    "/peerOrganizations/",
+                    domainName, format("/users/" + user.getName() + "@%s/msp/keystore", domainName))
+                    .toFile();
         return Paths.get(cryptoDir,
-                "/peerOrganizations/",
-                domainName, format("/users/" + user + "@%s/msp/keystore", domainName))
-                .toFile();
+                domainName, user.getName(), "keystore").toFile();
+
     }
 
-    public static File getCertConfigPath(String domainName, String user, String cryptoDir) {
-        return Paths.get(cryptoDir, "/peerOrganizations/",
-                domainName,
-                format("/users/" + user + "@%s/msp/signcerts/" + user + "@%s-cert.pem", domainName,
-                        domainName)).toFile();
+    public static File getCertConfigPath(String domainName, User user, String cryptoDir) {
+        if (user.isAdmin())
+            return Paths.get(cryptoDir, "/peerOrganizations/",
+                    domainName,
+                    format("/users/" + user.getName() + "@%s/msp/signcerts/" + user.getName() + "@%s-cert.pem", domainName,
+                            domainName)).toFile();
+        return Paths.get(cryptoDir,
+                domainName, user.getName(), "@%s-cert.pem").toFile();
     }
 
     public static PrivateKey getPrivateKeyFromBytes(byte[] data) throws IOException, NoSuchProviderException,
