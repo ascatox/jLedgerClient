@@ -91,7 +91,7 @@ public class Utils {
         if (user.isAdmin())
             return Paths.get(cryptoDir,
                     "/peerOrganizations/",
-                    domainName, format("/users/" + user.getName() + "@%s/msp/keystore", domainName))
+                    domainName, format("/users/" + capitalizeFirstLetter(user.getName()) + "@%s/msp/keystore", domainName))
                     .toFile();
         return Paths.get(cryptoDir,
                 domainName, user.getName(), "keystore").toFile();
@@ -102,7 +102,7 @@ public class Utils {
         if (user.isAdmin())
             return Paths.get(cryptoDir, "/peerOrganizations/",
                     domainName,
-                    format("/users/" + user.getName() + "@%s/msp/signcerts/" + user.getName() + "@%s-cert.pem", domainName,
+                    format("/users/" + capitalizeFirstLetter(user.getName()) + "@%s/msp/signcerts/" + capitalizeFirstLetter(user.getName()) + "@%s-cert.pem", domainName,
                             domainName)).toFile();
         return Paths.get(cryptoDir,
                 domainName, user.getName(), "ca-cert.pem").toFile();
@@ -124,14 +124,19 @@ public class Utils {
         return privateKey;
     }
 
+    private static String capitalizeFirstLetter(String username) {
+        return username.substring(0, 1).toUpperCase() + username.substring(1);
+    }
+
     public static void main(String[] args) {
-        User user = new User();
-        user.setName("test2");
-        Set roles = new HashSet();
-        roles.add("user");
-        user.setRoles(roles);
-        System.out.println(getCertConfigPath("org1.example.com", user, "/Users/ascatox/Desktop/crypto-users"));
-        System.out.println(findFileSk("org1.example.com", user, "/Users/ascatox/Desktop/crypto-users").getAbsoluteFile());
+//        User user = new User();
+//        user.setName("test2");
+//        Set roles = new HashSet();
+//        roles.add("user");
+//        user.setRoles(roles);
+//        System.out.println(getCertConfigPath("org1.example.com", user, "/Users/ascatox/Desktop/crypto-users"));
+//        System.out.println(findFileSk("org1.example.com", user, "/Users/ascatox/Desktop/crypto-users").getAbsoluteFile());
+        System.out.println(capitalizeFirstLetter("Admin"));
     }
 
 }
