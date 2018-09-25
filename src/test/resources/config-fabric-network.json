@@ -3,12 +3,12 @@
   "type": "hlfv1.1",
   "channelName": "ledgerchannel",
   "timeout": 5000,
-  "cryptoconfigdir": "",
+  "cryptoconfigdir": "/Users/ascatox/Desktop/crypto-config",
   "tls": false,
   "chaincode": {
-    "path": "analitics-chaincode",
-    "name": "chaincode",
-    "version": "1.0",
+    "path": "analytics-chaincode",
+    "name": "analytics-chaincode",
+    "version": "1.1",
     "lang": "NODE"
   },
   "organizations": [
@@ -18,7 +18,7 @@
       "peers": [
         {
           "name": "peer0.org1.example.com",
-          "requestURL": "grpc://localhost",
+          "requestURL": "grpc://localhost:7051",
           "eventURL": "grpc://localhost:7053"
         }
       ],

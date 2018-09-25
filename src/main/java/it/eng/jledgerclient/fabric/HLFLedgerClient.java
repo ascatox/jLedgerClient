@@ -33,11 +33,11 @@ public class HLFLedgerClient {
             Configuration configuration = configManager.getConfiguration();
             if (null == configuration || null == configuration.getOrganizations() || configuration.getOrganizations().isEmpty()) {
                 log.error("Configuration missing!!! Check you config file!!!");
-                throw new JLedgerClientException("Configuration missing!!! Check you config file!!!");
+                throw new JLedgerClientException("Configuration missing!!! Check your config file!!!");
             }
             List<Organization> organizations = configuration.getOrganizations();
             if (null == organizations || organizations.isEmpty())
-                throw new JLedgerClientException("Organizations missing!!! Check you config file!!!");
+                throw new JLedgerClientException("Organizations missing!!! Check your config file!!!");
             //for (Organization org : organizations) {
             //FIXME multiple Organizations
             ledgerInteractionHelper = new LedgerInteractionHelper(configManager, organizations.get(0));
