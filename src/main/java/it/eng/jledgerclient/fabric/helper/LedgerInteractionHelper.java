@@ -64,6 +64,7 @@ final public class LedgerInteractionHelper {
             throw new JLedgerClientException("Channel is not initialized");
         }
         this.channel = channel;
+        this.client.setUserContext(organization.getLoggedUser());
         this.eventHandler = EventHandler.getInstance(this.channel, this.configuration.getChaincode());
         this.controlInstalledChaincodeOnPeers(configuration.getChaincode());
         this.controlInstantiatedChaincodeOnPeers(configuration.getChaincode());
