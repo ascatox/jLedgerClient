@@ -28,6 +28,16 @@ public class JsonConverter {
         }
     }
 
+    public static String convertToJsonNode(Object obj) throws JLedgerClientException {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            log.error(e);
+            throw new JLedgerClientException(e);
+        }
+    }
+
     public static Object convertFromJson(String json, Class clazz, boolean isCollection) throws JLedgerClientException {
         try {
             if (StringUtils.isEmpty(json))
@@ -45,7 +55,6 @@ public class JsonConverter {
             throw new JLedgerClientException(e);
         }
     }
-
 
 }
 
