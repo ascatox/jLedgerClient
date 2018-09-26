@@ -169,6 +169,7 @@ final public class LedgerInteractionHelper {
             String[] argsArr = new String[args.size()];
             argsArr = args.toArray(argsArr);
 
+            String arguments = String.join(",", args);
             ///////////////
             /// Send transaction proposal to all peers
             TransactionProposalRequest transactionProposalRequest = client.newTransactionProposalRequest();
@@ -176,10 +177,11 @@ final public class LedgerInteractionHelper {
             transactionProposalRequest.setFcn(functionName);
             transactionProposalRequest.setArgs(argsArr);
             transactionProposalRequest.setProposalWaitTime(configManager.getProposalWaitTime());
+
             if (user != null) { // specific user use that
                 transactionProposalRequest.setUserContext(user);
             }
-            log.debug("sending transaction proposal to all peers with arguments:", args.get(0)); //FIXME
+            log.debug("sending transaction proposal to all peers with arguments:", arguments); //FIXME
             String payload = null;
             Collection<ProposalResponse> invokePropResp = channel.sendTransactionProposal(transactionProposalRequest);
             for (ProposalResponse response : invokePropResp) {
@@ -198,11 +200,11 @@ final public class LedgerInteractionHelper {
                 ProposalResponse firstTransactionProposalResponse = failed.iterator().next();
 
                 throw new ProposalException(format("Not enough endorsers for invoke(move a,b,%s):%d endorser error:%s. Was verified:%b",
-                        args.get(0), firstTransactionProposalResponse.getStatus().getStatus(), firstTransactionProposalResponse.getMessage(), firstTransactionProposalResponse.isVerified()));
+                        arguments, firstTransactionProposalResponse.getStatus().getStatus(), firstTransactionProposalResponse.getMessage(), firstTransactionProposalResponse.isVerified()));
             }
             log.debug("Successfully received transaction proposal responses.");
             // Send transaction to orderer
-            log.debug("Sending chaincode transaction to orderer.", args.get(0));
+            log.debug("Sending chaincode transaction to orderer.", arguments);
             if (user != null) {
                 return new InvokeReturn(channel.sendTransaction(successful, user), payload);
             }
