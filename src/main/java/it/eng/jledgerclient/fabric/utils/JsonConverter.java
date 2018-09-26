@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -45,9 +46,10 @@ public class JsonConverter {
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true); //This property serialize/deserialize not considering the case of fields
             if (isCollection) {
-                ObjectReader objectReader = mapper.reader().forType(new TypeReference<List<?>>() {
-                });
-                return objectReader.readValue(json);
+                //ObjectReader objectReader = mapper.reader().forType(new TypeReference<List<?>>() {
+                //});
+                // return objectReader.readValue(json);
+                return mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(List.class, clazz));
             }
             return mapper.readValue(json, clazz);
         } catch (Exception e) {
@@ -55,6 +57,7 @@ public class JsonConverter {
             throw new JLedgerClientException(e);
         }
     }
+
 
 }
 
