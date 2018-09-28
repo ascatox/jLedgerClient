@@ -95,7 +95,7 @@ It is the same seen just before.<br>
     }
  ```
  
- To record an event sent by the chaincode you need a **ChaincodeEventListener** . <br>
+ To record an event sent by the chaincode you need to instantiate a **ChaincodeEventListener**. <br>
  
  ``` ChaincodeEventListener chaincodeEventListener = new ChaincodeEventListener() {
                 @Override
