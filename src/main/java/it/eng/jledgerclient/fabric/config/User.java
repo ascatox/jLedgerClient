@@ -1,7 +1,9 @@
 package it.eng.jledgerclient.fabric.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hyperledger.fabric_ca.sdk.Attribute;
 
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -16,8 +18,17 @@ public class User implements org.hyperledger.fabric.sdk.User {
     private Enrollment enrollment;
     private String mspId;
     private String secret;
+    private Collection<Attribute> attributes;
 
     public User() {
+    }
+
+    public Collection<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Collection<Attribute> attributes) {
+        this.attributes = attributes;
     }
 
     @Override

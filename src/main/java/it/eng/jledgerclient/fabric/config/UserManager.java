@@ -8,7 +8,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
+import org.hyperledger.fabric_ca.sdk.Attribute;
+import org.hyperledger.fabric_ca.sdk.HFCAIdentity;
 import org.hyperledger.fabric_ca.sdk.exception.EnrollmentException;
+import org.hyperledger.fabric_ca.sdk.exception.IdentityException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -52,14 +56,15 @@ public class UserManager {
             for (User user : users) {
                 doCompleteUser(user);
             }
-        } catch (IOException | NoSuchProviderException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (IOException | NoSuchProviderException | NoSuchAlgorithmException
+                | InvalidKeySpecException | IdentityException | org.hyperledger.fabric_ca.sdk.exception.InvalidArgumentException e) {
             log.error(e);
             throw new JLedgerClientException(e);
         }
     }
 
 
-    private void doCompleteUser(User user) throws IOException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException, JLedgerClientException {
+    private void doCompleteUser(User user) throws IOException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException, org.hyperledger.fabric_ca.sdk.exception.InvalidArgumentException, IdentityException {
         user.setMspId(organization.getMspID());
         //if (user.isAdmin()) {
         File certConfigPath = Utils.getCertConfigPath(organization.getDomainName(), user, configuration.getCryptoconfigdir());
@@ -67,13 +72,21 @@ public class UserManager {
         File fileSk = Utils.findFileSk(organization.getDomainName(), user, configuration.getCryptoconfigdir());
         PrivateKey privateKey = Utils.getPrivateKeyFromBytes(IOUtils.toByteArray(new FileInputStream(fileSk)));
         user.setEnrollment(new Enrollment(privateKey, certificate));
-
-        //}
-        /*else {
-            enrollUser(user, organization.getCa());
-        }*/
+        getUserAttributes(user, organization.getCa());
     }
 
+    private void getUserAttributes(User user, Ca ca) throws org.hyperledger.fabric_ca.sdk.exception.InvalidArgumentException, IdentityException {
+        final Collection<HFCAIdentity> hfcaIdentities = ca.getCaClient().getHFCAIdentities(user);
+        if (null != hfcaIdentities && !hfcaIdentities.isEmpty()) {
+            for (HFCAIdentity identity :
+                    hfcaIdentities) {
+                Collection<Attribute> attributes = identity.getAttributes();
+                if (null != attributes && !attributes.isEmpty()) {
+                    user.setAttributes(attributes);
+                }
+            }
+        }
+    }
 
     private void enrollUser(User user, Ca ca) throws JLedgerClientException {
         try {
