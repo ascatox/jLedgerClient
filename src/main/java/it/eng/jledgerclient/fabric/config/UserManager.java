@@ -12,6 +12,7 @@ import org.hyperledger.fabric_ca.sdk.Attribute;
 import org.hyperledger.fabric_ca.sdk.HFCAIdentity;
 import org.hyperledger.fabric_ca.sdk.exception.EnrollmentException;
 import org.hyperledger.fabric_ca.sdk.exception.IdentityException;
+import org.w3c.dom.Attr;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +22,7 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -78,12 +80,11 @@ public class UserManager {
     private void getUserAttributes(User user, Ca ca) throws org.hyperledger.fabric_ca.sdk.exception.InvalidArgumentException, IdentityException {
         final Collection<HFCAIdentity> hfcaIdentities = ca.getCaClient().getHFCAIdentities(user);
         if (null != hfcaIdentities && !hfcaIdentities.isEmpty()) {
-            for (HFCAIdentity identity :
-                    hfcaIdentities) {
-                Collection<Attribute> attributes = identity.getAttributes();
-                if (null != attributes && !attributes.isEmpty()) {
-                    user.setAttributes(attributes);
-                }
+            List<HFCAIdentity> listIds = (List) hfcaIdentities;
+            HFCAIdentity identity = (null == listIds || listIds.isEmpty() ? null : listIds.get(0));
+            Collection<Attribute> attributes = identity.getAttributes();
+            if (null != attributes && !attributes.isEmpty()) {
+                user.setAttributes(attributes);
             }
         }
     }
