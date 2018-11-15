@@ -1,6 +1,7 @@
 package it.eng.jledgerclient.fabric;
 
 import it.eng.jledgerclient.exception.JLedgerClientException;
+import it.eng.jledgerclient.fabric.config.Certificates;
 import it.eng.jledgerclient.fabric.config.ConfigManager;
 import it.eng.jledgerclient.fabric.config.Configuration;
 import it.eng.jledgerclient.fabric.config.Organization;
@@ -11,6 +12,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.hyperledger.fabric.sdk.ChaincodeEventListener;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -23,13 +25,19 @@ public class HLFLedgerClient {
     protected ConfigManager configManager;
 
     public HLFLedgerClient() throws JLedgerClientException {
-        doLedgerClient();
+        doLedgerClient(null, null, null);
     }
 
+    public HLFLedgerClient(InputStream configFabricNetwork,
+                           InputStream certificate, InputStream keystore) throws JLedgerClientException {
+        doLedgerClient(configFabricNetwork, certificate, keystore);
+    }
 
-    private void doLedgerClient() throws JLedgerClientException {
+    private void doLedgerClient(InputStream configFabricNetwork,
+                                InputStream certificate, InputStream keystore) throws JLedgerClientException {
         try {
-            configManager = ConfigManager.getInstance();
+            Certificates certificates = new Certificates(configFabricNetwork, certificate, keystore);
+            configManager = ConfigManager.getInstance(certificates);
             Configuration configuration = configManager.getConfiguration();
             if (null == configuration || null == configuration.getOrganizations() || configuration.getOrganizations().isEmpty()) {
                 log.error("Configuration missing!!! Check you config file!!!");

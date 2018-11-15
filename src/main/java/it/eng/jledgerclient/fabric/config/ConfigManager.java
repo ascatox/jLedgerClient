@@ -25,20 +25,23 @@ public class ConfigManager {
 
     private Configuration configuration;
     private static ConfigManager ourInstance;
+    private Certificates certificates;
 
-    private ConfigManager() {
-        this.configuration = loadConfigurationFromJSONFile();
+
+    private ConfigManager(Certificates certificates) {
+        this.setCertificates(certificates);
+        this.configuration = loadConfigurationFromJSONFile(certificates.getConfigFabricNetwork());
     }
 
     public Configuration getConfiguration() {
         return this.configuration;
     }
 
-    public static ConfigManager getInstance() throws JLedgerClientException, InvalidArgumentException {
+    public static ConfigManager getInstance(Certificates certificates) throws JLedgerClientException, InvalidArgumentException {
         if (ourInstance == null) { //1
             synchronized (ConfigManager.class) {
                 if (ourInstance == null) {  //2
-                    ourInstance = new ConfigManager();
+                    ourInstance = new ConfigManager(certificates);
                 }
             }
         }
@@ -46,10 +49,13 @@ public class ConfigManager {
     }
 
 
-    private Configuration loadConfigurationFromJSONFile() {
+    private Configuration loadConfigurationFromJSONFile(InputStream configFabricNetwork) {
 
         try {
-            InputStream resource = getClass().getResourceAsStream("/config-fabric-network.json");
+            InputStream resource = configFabricNetwork;
+            if (null == resource) {
+                resource = getClass().getResourceAsStream("/config-fabric-network.json");
+            }
             ObjectMapper objectMapper = new ObjectMapper();
             Configuration configuration = objectMapper.readValue(resource, Configuration.class);
             //log.debug("Configuration JSON is\n" + resource.getPath());
@@ -143,6 +149,16 @@ public class ConfigManager {
         return configuration.isTls() ?
                 location.replaceFirst("^http://", "https://") : location;
     }
+
+
+    public Certificates getCertificates() {
+        return certificates;
+    }
+
+    public void setCertificates(Certificates certificates) {
+        this.certificates = certificates;
+    }
+
 
 
 }//end class

@@ -33,17 +33,19 @@ public class UserManager {
     private static UserManager instance;
     private Configuration configuration;
     private Organization organization;
+    private Certificates certificates;
 
-    private UserManager(Configuration configuration, Organization organization) {
+    private UserManager(Configuration configuration, Certificates certificates, Organization organization) {
         this.configuration = configuration;
         this.organization = organization;
+        this.certificates = certificates;
     }
 
-    public static UserManager getInstance(Configuration configuration, Organization organization) throws JLedgerClientException, InvalidArgumentException {
+    public static UserManager getInstance(Configuration configuration, Certificates certificates, Organization organization) throws JLedgerClientException, InvalidArgumentException {
         if (instance == null || !instance.organization.equals(organization)) { //1
             synchronized (ChannelInitializationManager.class) {
                 if (instance == null || !instance.organization.equals(organization)) {  //2
-                    instance = new UserManager(configuration, organization);
+                    instance = new UserManager(configuration, certificates, organization);
                 }
             }
         }
@@ -66,11 +68,17 @@ public class UserManager {
 
     private void doCompleteUser(User user) throws IOException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException, org.hyperledger.fabric_ca.sdk.exception.InvalidArgumentException, IdentityException {
         user.setMspId(organization.getMspID());
-        //if (user.isAdmin()) {
-        File certConfigPath = Utils.getCertConfigPath(organization.getDomainName(), user, configuration.getCryptoconfigdir());
-        String certificate = new String(IOUtils.toByteArray(new FileInputStream(certConfigPath)), ConfigManager.UTF_8);
-        File fileSk = Utils.findFileSk(organization.getDomainName(), user, configuration.getCryptoconfigdir());
-        PrivateKey privateKey = Utils.getPrivateKeyFromBytes(IOUtils.toByteArray(new FileInputStream(fileSk)));
+        String certificate = null;
+        PrivateKey privateKey = null;
+        if (!certificates.areGiven()) {
+            File certConfigPath = Utils.getCertConfigPath(organization.getDomainName(), user, configuration.getCryptoconfigdir());
+            certificate = new String(IOUtils.toByteArray(new FileInputStream(certConfigPath)), ConfigManager.UTF_8);
+            File fileSk = Utils.findFileSk(organization.getDomainName(), user, configuration.getCryptoconfigdir());
+            privateKey = Utils.getPrivateKeyFromBytes(IOUtils.toByteArray(new FileInputStream(fileSk)));
+        } else {
+            certificate = new String(IOUtils.toByteArray(certificates.getCertificate()), ConfigManager.UTF_8);
+            privateKey = Utils.getPrivateKeyFromBytes(IOUtils.toByteArray(certificates.getKeystore()));
+        }
         user.setEnrollment(new Enrollment(privateKey, certificate));
         //getUserAttributes(user, organization.getCa());
     }
