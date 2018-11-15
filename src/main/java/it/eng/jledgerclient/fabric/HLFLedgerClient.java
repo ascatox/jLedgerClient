@@ -33,7 +33,7 @@ public class HLFLedgerClient {
         doLedgerClient(configFabricNetwork, certificate, keystore);
     }
 
-    private void doLedgerClient(InputStream configFabricNetwork,
+    protected void doLedgerClient(InputStream configFabricNetwork,
                                 InputStream certificate, InputStream keystore) throws JLedgerClientException {
         try {
             Certificates certificates = new Certificates(configFabricNetwork, certificate, keystore);
