@@ -37,9 +37,7 @@ final public class LedgerInteractionHelper {
 
     }
 
-    public LedgerInteractionHelper(ConfigManager configManager, Organization organization, String userName) throws JLedgerClientException
-
-    {
+    public LedgerInteractionHelper(ConfigManager configManager, Organization organization, String userName) throws JLedgerClientException {
         try {
             //Create instance of client.
             client = HFClient.createNewInstance();
@@ -47,7 +45,7 @@ final public class LedgerInteractionHelper {
             this.configManager = configManager;
             this.organization = organization;
             this.configuration = configManager.getConfiguration();
-            this.userManager = UserManager.getInstance(configuration, organization);
+            this.userManager = UserManager.getInstance(configuration, configManager.getCertificates(), organization);
             this.userManager.completeUsers();
             setup();
         } catch (Exception e) {
