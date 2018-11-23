@@ -62,7 +62,7 @@ public class EventHandler {
             String event = EXPECTED_EVENT_NAME;
             if (StringUtils.isNotEmpty(eventName))
                 event = eventName;
-            String chaincodeEventListenerHandle = channel.registerChaincodeEventListener(Pattern.compile(".*"),
+            String chaincodeEventListenerHandle = channel.registerChaincodeEventListener(Pattern.compile(chaincode.getName()),
                     Pattern.compile(Pattern.quote(event)), chaincodeEventListener
 
                     /*(handle, blockEvent, chaincodeEvent) -> {
