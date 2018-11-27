@@ -2,12 +2,14 @@ package it.eng.jledgerclient.fabric.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.eng.jledgerclient.exception.JLedgerClientException;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.helper.Utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -80,11 +82,13 @@ public class ConfigManager {
     }
 
     private Properties getEndpointProperties(final String type, final String name) {
-
         final String domainName = getDomainName(name);
-
-        File certTLS = Paths.get(configuration.getCryptoconfigdir() + "/ordererOrganizations".replace("orderer", type), domainName, type + "s",
-                name, "tls/server.crt").toFile();
+        File certTLS = null;
+        if (certificates.isCertTlsGiven()) {
+            certTLS = certificates.getCertificateTls();
+        } else
+            certTLS = Paths.get(configuration.getCryptoconfigdir() + "/ordererOrganizations".replace("orderer", type), domainName, type + "s",
+                    name, "tls/server.crt").toFile();
         if (!certTLS.exists() && configuration.isTls()) {
             throw new RuntimeException(format("Missing cert file for: %s. Could not find at location: %s", name,
                     certTLS.getAbsolutePath()));
@@ -96,7 +100,6 @@ public class ConfigManager {
         ret.setProperty("hostnameOverride", name);
         ret.setProperty("sslProvider", "openSSL");
         ret.setProperty("negotiationType", "TLS");
-
         return ret;
     }
 
@@ -158,7 +161,6 @@ public class ConfigManager {
     public void setCertificates(Certificates certificates) {
         this.certificates = certificates;
     }
-
 
 
 }//end class

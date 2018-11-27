@@ -12,12 +12,13 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.hyperledger.fabric.sdk.ChaincodeEventListener;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class HLFLedgerClient {
+public class HLFLedgerClient implements LedgerClient {
 
     protected final static Logger log = LogManager.getLogger(HLFLedgerClient.class);
 
@@ -25,18 +26,24 @@ public class HLFLedgerClient {
     protected ConfigManager configManager;
 
     public HLFLedgerClient() throws JLedgerClientException {
-        doLedgerClient(null, null, null);
+        doLedgerClient(null, null, null, null);
     }
 
     public HLFLedgerClient(InputStream configFabricNetwork,
                            InputStream certificate, InputStream keystore) throws JLedgerClientException {
-        doLedgerClient(configFabricNetwork, certificate, keystore);
+        doLedgerClient(configFabricNetwork, certificate, keystore, null);
     }
 
+    public HLFLedgerClient(InputStream configFabricNetwork,
+                           InputStream certificate, InputStream keystore, File certificateTls) throws JLedgerClientException {
+        doLedgerClient(configFabricNetwork, certificate, keystore, certificateTls);
+    }
+
+
     protected void doLedgerClient(InputStream configFabricNetwork,
-                                InputStream certificate, InputStream keystore) throws JLedgerClientException {
+                                  InputStream certificate, InputStream keystore, File certificateTls) throws JLedgerClientException {
         try {
-            Certificates certificates = new Certificates(configFabricNetwork, certificate, keystore);
+            Certificates certificates = new Certificates(configFabricNetwork, certificate, keystore, certificateTls);
             configManager = ConfigManager.getInstance(certificates);
             Configuration configuration = configManager.getConfiguration();
             if (null == configuration || null == configuration.getOrganizations() || configuration.getOrganizations().isEmpty()) {
@@ -56,7 +63,7 @@ public class HLFLedgerClient {
         }
     }
 
-
+    @Override
     public String doInvoke(String fcn, List<String> args) throws JLedgerClientException {
         final InvokeReturn invokeReturn = ledgerInteractionHelper.invokeChaincode(fcn, args);
         try {
@@ -71,7 +78,7 @@ public class HLFLedgerClient {
         }
     }
 
-
+    @Override
     public List<String> doQuery(String fcn, List<String> args) throws JLedgerClientException {
         List<String> data = new ArrayList<>();
         try {
@@ -86,11 +93,12 @@ public class HLFLedgerClient {
         }
     }
 
-
+    @Override
     public String doRegisterEvent(String eventName, ChaincodeEventListener chaincodeEventListener) throws JLedgerClientException {
         return ledgerInteractionHelper.getEventHandler().register(eventName, chaincodeEventListener);
     }
 
+    @Override
     public void doUnregisterEvent(String chaincodeEventListenerHandle) throws JLedgerClientException {
         ledgerInteractionHelper.getEventHandler().unregister(chaincodeEventListenerHandle);
     }

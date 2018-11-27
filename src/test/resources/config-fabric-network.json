@@ -1,15 +1,14 @@
 {
   "name": "fabric-network",
-  "type": "hlfv1.1",
+  "type": "hlfv1.2",
   "channelName": "ledgerchannel",
   "timeout": 5000,
   "cryptoconfigdir": "/Users/ascatox/Desktop/crypto-config",
-  "tls": false,
+  "tls": true,
   "chaincode": {
-    "path": "analytics-chaincode",
-    "name": "analytics-chaincode",
-    "version": "1.1",
-    "lang": "NODE"
+    "path": "energy-management-chaincode",
+    "name": "energy-management-chaincode",
+    "version": "1.6"
   },
   "organizations": [
     {
