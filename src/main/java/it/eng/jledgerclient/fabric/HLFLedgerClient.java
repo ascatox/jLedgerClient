@@ -8,39 +8,38 @@ import it.eng.jledgerclient.fabric.config.Organization;
 import it.eng.jledgerclient.fabric.helper.InvokeReturn;
 import it.eng.jledgerclient.fabric.helper.LedgerInteractionHelper;
 import it.eng.jledgerclient.fabric.helper.QueryReturn;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.hyperledger.fabric.sdk.ChaincodeEventListener;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class HLFLedgerClient {
 
-    protected final static Logger log = LogManager.getLogger(HLFLedgerClient.class);
+    protected final static Logger log = Logger.getLogger(HLFLedgerClient.class.getName());
 
     protected LedgerInteractionHelper ledgerInteractionHelper;
     protected ConfigManager configManager;
 
-    public HLFLedgerClient() throws JLedgerClientException {
+    public HLFLedgerClient() {
         doLedgerClient(null, null, null);
     }
 
     public HLFLedgerClient(InputStream configFabricNetwork,
-                           InputStream certificate, InputStream keystore) throws JLedgerClientException {
+                           InputStream certificate, InputStream keystore) {
         doLedgerClient(configFabricNetwork, certificate, keystore);
     }
 
     protected void doLedgerClient(InputStream configFabricNetwork,
-                                InputStream certificate, InputStream keystore) throws JLedgerClientException {
+                                InputStream certificate, InputStream keystore) {
         try {
             Certificates certificates = new Certificates(configFabricNetwork, certificate, keystore);
             configManager = ConfigManager.getInstance(certificates);
             Configuration configuration = configManager.getConfiguration();
             if (null == configuration || null == configuration.getOrganizations() || configuration.getOrganizations().isEmpty()) {
-                log.error("Configuration missing!!! Check you config file!!!");
+                log.severe("Configuration missing!!! Check you config file!!!");
                 throw new JLedgerClientException("Configuration missing!!! Check your config file!!!");
             }
             List<Organization> organizations = configuration.getOrganizations();
@@ -51,8 +50,7 @@ public class HLFLedgerClient {
             ledgerInteractionHelper = new LedgerInteractionHelper(configManager, organizations.get(0));
             //}
         } catch (Exception e) {
-            log.error(e);
-            throw new JLedgerClientException(e);
+            log.severe(e.getMessage());
         }
     }
 
@@ -60,13 +58,13 @@ public class HLFLedgerClient {
     public String doInvoke(String fcn, List<String> args) throws JLedgerClientException {
         final InvokeReturn invokeReturn = ledgerInteractionHelper.invokeChaincode(fcn, args);
         try {
-            log.debug("BEFORE -> Store Completable Future at " + System.currentTimeMillis());
+            log.fine("BEFORE -> Store Completable Future at " + System.currentTimeMillis());
             invokeReturn.getCompletableFuture().get(configManager.getConfiguration().getTimeout(), TimeUnit.MILLISECONDS);
-            log.debug("AFTER -> Store Completable Future at " + System.currentTimeMillis());
+            log.fine("AFTER -> Store Completable Future at " + System.currentTimeMillis());
             final String payload = invokeReturn.getPayload();
             return payload;
         } catch (Exception e) {
-            log.error(fcn.toUpperCase() + " " + e.getMessage());
+            log.severe(fcn.toUpperCase() + " " + e.getMessage());
             throw new JLedgerClientException(fcn + " " + e.getMessage());
         }
     }
@@ -81,7 +79,7 @@ public class HLFLedgerClient {
             }
             return data;
         } catch (Exception e) {
-            log.error(fcn + " " + e.getMessage());
+            log.severe(fcn + " " + e.getMessage());
             throw new JLedgerClientException(fcn + " " + e.getMessage());
         }
     }

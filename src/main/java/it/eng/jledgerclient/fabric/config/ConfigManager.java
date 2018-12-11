@@ -2,8 +2,6 @@ package it.eng.jledgerclient.fabric.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.eng.jledgerclient.exception.JLedgerClientException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.helper.Utils;
 
@@ -11,6 +9,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import static java.lang.String.format;
 
@@ -21,7 +20,7 @@ public class ConfigManager {
     public static final String PROPOSALWAITTIME = "120000";
     public static final String UTF_8 = "UTF-8";
 
-    private final static Logger log = LogManager.getFormatterLogger(ConfigManager.class);
+    private final static Logger log = Logger.getLogger(ConfigManager.class.getName());
 
     private Configuration configuration;
     private static ConfigManager ourInstance;
@@ -58,10 +57,10 @@ public class ConfigManager {
             }
             ObjectMapper objectMapper = new ObjectMapper();
             Configuration configuration = objectMapper.readValue(resource, Configuration.class);
-            //log.debug("Configuration JSON is\n" + resource.getPath());
+            //log.fine("Configuration JSON is\n" + resource.getPath());
             return configuration;
         } catch (Exception e) {
-            log.error(e);
+            log.severe(e.getMessage());
         }
         return null;
 

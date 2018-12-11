@@ -1,17 +1,15 @@
 package it.eng.jledgerclient.fabric.helper;
 
-import it.eng.jledgerclient.fabric.config.Chaincode;
 import it.eng.jledgerclient.exception.JLedgerClientException;
+import it.eng.jledgerclient.fabric.config.Chaincode;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.BlockEvent;
 import org.hyperledger.fabric.sdk.ChaincodeEvent;
 import org.hyperledger.fabric.sdk.ChaincodeEventListener;
 import org.hyperledger.fabric.sdk.Channel;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 
-import java.util.Vector;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -19,7 +17,7 @@ import java.util.regex.Pattern;
  */
 public class EventHandler {
 
-    private final static Logger log = LogManager.getLogger(EventHandler.class);
+    private final static Logger log = Logger.getLogger(EventHandler.class.getName());
     private static final String EXPECTED_EVENT_NAME = "EVENT";
 
     private static EventHandler ourInstance;
@@ -81,7 +79,7 @@ public class EventHandler {
             );
             return chaincodeEventListenerHandle;
         } catch (InvalidArgumentException e) {
-            log.error(e);
+            log.severe(e.getMessage());
             throw new JLedgerClientException(e);
         }
     }
@@ -94,7 +92,7 @@ public class EventHandler {
         try {
             channel.unregisterChaincodeEventListener(chaincodeEventListenerHandle);
         } catch (Exception e) {
-            log.error(e);
+            log.severe(e.getMessage());
             throw new JLedgerClientException(e);
         }
     }

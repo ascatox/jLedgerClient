@@ -1,31 +1,29 @@
 package it.eng.jledgerclient.fabric.helper;
 
 
-
-import it.eng.jledgerclient.fabric.config.ConfigManager;
 import it.eng.jledgerclient.exception.JLedgerClientException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import it.eng.jledgerclient.fabric.config.ConfigManager;
+import it.eng.jledgerclient.fabric.config.OrdererConfig;
+import it.eng.jledgerclient.fabric.config.Organization;
+import it.eng.jledgerclient.fabric.config.PeerConfig;
 import org.hyperledger.fabric.sdk.Channel;
 import org.hyperledger.fabric.sdk.EventHub;
 import org.hyperledger.fabric.sdk.HFClient;
 import org.hyperledger.fabric.sdk.Peer;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.exception.TransactionException;
-import it.eng.jledgerclient.fabric.config.OrdererConfig;
-import it.eng.jledgerclient.fabric.config.Organization;
-import it.eng.jledgerclient.fabric.config.PeerConfig;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 /**
  * @author ascatox
  */
 public class ChannelInitializationManager {
-    private final static Logger log = LogManager.getLogger(ChannelInitializationManager.class);
+    private final static Logger log = Logger.getLogger(ChannelInitializationManager.class.getName());
 
     private ConfigManager configManager;
     private HFClient client;
@@ -62,7 +60,7 @@ public class ChannelInitializationManager {
         if (null == getChannel())
             this.channel = client.getChannel(configManager.getConfiguration().getChannelName());
         if (channel == null) {
-            log.warn("Channel " + configManager.getConfiguration().getChannelName() + " not initialized...");
+            log.warning("Channel " + configManager.getConfiguration().getChannelName() + " not initialized...");
             channel = client.newChannel(configManager.getConfiguration().getChannelName());
         }
     }
@@ -73,7 +71,7 @@ public class ChannelInitializationManager {
         //
         setupEnv(client, configManager, organization);
         try {
-            log.debug("Constructing channel java structures %s", channel.getName());
+            //log.debug("Constructing channel java structures %s", channel.getName());
 
             buildOrderers(organization.getOrderers());
 
@@ -83,9 +81,9 @@ public class ChannelInitializationManager {
 
             channel.initialize(); //There's no need to initialize the channel we are only building the java
             // structures.
-            log.debug("Finished initialization channel java structures %s", channel.getName());
+            //log.debug("Finished initialization channel java structures %s", channel.getName());
         } catch (InvalidArgumentException | TransactionException e) {
-            log.error(e);
+            log.severe(e.getMessage());
             throw new JLedgerClientException(e);
         }
 

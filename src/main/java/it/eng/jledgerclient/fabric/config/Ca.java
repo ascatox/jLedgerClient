@@ -2,8 +2,6 @@ package it.eng.jledgerclient.fabric.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.exception.CryptoException;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;
 import org.hyperledger.fabric_ca.sdk.HFCAClient;
@@ -12,6 +10,7 @@ import org.hyperledger.fabric_ca.sdk.exception.InvalidArgumentException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class Ca {
 
@@ -20,7 +19,7 @@ public class Ca {
     @JsonIgnore
     private HFCAClient caClient;
 
-    private final static Logger log = LogManager.getLogger(Ca.class);
+    private final static Logger log = java.util.logging.Logger.getLogger(Ca.class.getName());
 
 
     public Ca(String url, String name) {
@@ -56,7 +55,7 @@ public class Ca {
             } catch (MalformedURLException | InvalidArgumentException | InstantiationException | InvocationTargetException
                     | NoSuchMethodException | IllegalAccessException | org.hyperledger.fabric.sdk.exception.InvalidArgumentException |
                     CryptoException | ClassNotFoundException e) {
-                log.error(e);
+                log.severe(e.toString());
             }
         }
         return caClient;

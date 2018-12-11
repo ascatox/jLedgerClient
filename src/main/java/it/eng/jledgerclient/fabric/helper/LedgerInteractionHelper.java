@@ -2,16 +2,15 @@ package it.eng.jledgerclient.fabric.helper;
 
 import it.eng.jledgerclient.exception.JLedgerClientException;
 import it.eng.jledgerclient.fabric.config.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.protos.peer.Query;
-import org.hyperledger.fabric.sdk.*;
 import org.hyperledger.fabric.sdk.User;
+import org.hyperledger.fabric.sdk.*;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.exception.ProposalException;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 import static java.lang.String.format;
 
@@ -20,7 +19,7 @@ import static java.lang.String.format;
  */
 final public class LedgerInteractionHelper {
 
-    private final static Logger log = LogManager.getLogger(LedgerInteractionHelper.class);
+    private final static Logger log = Logger.getLogger(LedgerInteractionHelper.class.getName());
     private HFClient client;
     private Channel channel;
     private ConfigManager configManager;
@@ -49,7 +48,7 @@ final public class LedgerInteractionHelper {
             this.userManager.completeUsers();
             setup();
         } catch (Exception e) {
-            log.error(e);
+            log.severe(e.getMessage());
             throw new JLedgerClientException(e);
         }
     }
@@ -58,7 +57,7 @@ final public class LedgerInteractionHelper {
         ChannelInitializationManager channelInitializationManager = ChannelInitializationManager.getInstance(this.client, this.configManager, this.organization);
         Channel channel = channelInitializationManager.getChannel();
         if (null == channel || !channel.isInitialized() || channel.isShutdown()) {
-            log.error("Channel is not initialized");
+            log.severe("Channel is not initialized");
             throw new JLedgerClientException("Channel is not initialized");
         }
         this.channel = channel;
@@ -70,16 +69,16 @@ final public class LedgerInteractionHelper {
 
     public void controlInstalledChaincodeOnPeers(Chaincode chaincode) throws JLedgerClientException {
         if (this.organization.getLoggedUser().isAdmin()) {
-            log.debug("Checking installed chaincode on all peer: %s, at version: %s, on peer: %s", chaincode.getName(), chaincode.getVersion(), channel.getPeers());
+            //  log.debug("Checking installed chaincode on all peer: %s, at version: %s, on peer: %s", chaincode.getName(), chaincode.getVersion(), channel.getPeers());
             for (Peer peer : channel.getPeers()) {
                 try {
                     if (!checkInstalledChaincode(peer, chaincode)) {
-                        throw new JLedgerClientException(format("Peer %s is missing chaincode whith name: %s, path: %s, version: %s",
+                        throw new JLedgerClientException(format("Peer %s is missing chaincode whith name: %s, path: %s",
                                 peer.getName(), chaincode.getName(), chaincode.getPath(), chaincode.getVersion()));
                     }
                 } catch (JLedgerClientException e) {
-                    log.error(e);
-                    throw new JLedgerClientException(format("Peer %s is missing chaincode whith name: %s, path: %s, version: %s",
+                    log.severe(e.getMessage());
+                    throw new JLedgerClientException(format("Peer %s is missing chaincode whith name: %s, path: %s",
                             peer.getName(), chaincode.getName(), chaincode.getPath(), chaincode.getVersion()));
                 }
             }
@@ -87,25 +86,25 @@ final public class LedgerInteractionHelper {
     }
 
     private boolean checkInstalledChaincode(Peer peer, Chaincode chaincode) throws JLedgerClientException {
-        log.debug("Checking installed chaincode: %s, at version: %s, on peer: %s", chaincode.getName(), chaincode.getVersion(), peer.getName());
+        //log.debug("Checking installed chaincode: %s, at version: %s, on peer: %s", chaincode.getName(), chaincode.getVersion(), peer.getName());
         boolean found = false;
         try {
             List<Query.ChaincodeInfo> ccinfoList = null;
             ccinfoList = client.queryInstalledChaincodes(peer);
             for (Query.ChaincodeInfo ccifo : ccinfoList) {
                 if (chaincode.getPath() != null) {
-                    found = chaincode.getName().equals(ccifo.getName()) && chaincode.getPath().equals(ccifo.getPath()) && chaincode.getVersion().equals(ccifo.getVersion());
+                    found = chaincode.getName().equals(ccifo.getName()) && chaincode.getPath().equals(ccifo.getPath());
                     if (found) {
                         break;
                     }
                 }
-                found = chaincode.getName().equals(ccifo.getName()) && chaincode.getVersion().equals(ccifo.getVersion());
+                found = chaincode.getName().equals(ccifo.getName());
                 if (found) {
                     break;
                 }
             }
         } catch (InvalidArgumentException | ProposalException e) {
-            log.error(e);
+            log.severe(e.getMessage());
             throw new JLedgerClientException(
                     e);
         }
@@ -114,15 +113,15 @@ final public class LedgerInteractionHelper {
 
     public void controlInstantiatedChaincodeOnPeers(Chaincode chaincode) throws JLedgerClientException {
         if (this.organization.getLoggedUser().isAdmin()) {
-            log.debug("Checking installed chaincode on all peer: %s, at version: %s, on peer: %s", chaincode.getName(), chaincode.getVersion(), channel.getPeers());
+            // log.debug("Checking installed chaincode on all peer: %s, at version: %s, on peer: %s", chaincode.getName(), chaincode.getVersion(), channel.getPeers());
             for (Peer peer : channel.getPeers()) {
                 if (!checkInstantiatedChaincode(peer, chaincode)) {
                     try {
-                        throw new JLedgerClientException(format("Peer %s has not installed chaincode with name: %s, path: %s, version: %s",
+                        throw new JLedgerClientException(format("Peer %s has not installed chaincode with name: %s, path: %s",
                                 peer.getName(), chaincode.getName(), chaincode.getPath(), chaincode.getVersion()));
                     } catch (JLedgerClientException e) {
-                        log.error(e);
-                        throw new JLedgerClientException(format("Peer %s has not installed chaincode with name: %s, path: %s, version: %s",
+                        log.severe(e.getMessage());
+                        throw new JLedgerClientException(format("Peer %s has not installed chaincode with name: %s, path: %s",
                                 peer.getName(), chaincode.getName(), chaincode.getPath(), chaincode.getVersion()));
                     }
                 }
@@ -131,7 +130,7 @@ final public class LedgerInteractionHelper {
     }
 
     private boolean checkInstantiatedChaincode(Peer peer, Chaincode chaincode) throws JLedgerClientException {
-        log.debug("Checking instantiated chaincode: %s, at version: %s, on peer: %s", chaincode.getName(), chaincode.getVersion(), peer.getName());
+        //log.debug("Checking instantiated chaincode: %s, at version: %s, on peer: %s", chaincode.getName(), chaincode.getVersion(), peer.getName());
         boolean found = false;
         try {
             List<Query.ChaincodeInfo> ccinfoList = null;
@@ -140,18 +139,18 @@ final public class LedgerInteractionHelper {
             for (Query.ChaincodeInfo ccifo : ccinfoList) {
 
                 if (chaincode.getPath() != null) {
-                    found = chaincode.getName().equals(ccifo.getName()) && chaincode.getPath().equals(ccifo.getPath()) && chaincode.getVersion().equals(ccifo.getVersion());
+                    found = chaincode.getName().equals(ccifo.getName()) && chaincode.getPath().equals(ccifo.getPath());
                     if (found) {
                         break;
                     }
                 }
-                found = chaincode.getName().equals(ccifo.getName()) && chaincode.getVersion().equals(ccifo.getVersion());
+                found = chaincode.getName().equals(ccifo.getName());
                 if (found) {
                     break;
                 }
             }
         } catch (InvalidArgumentException | ProposalException e) {
-            log.error(e);
+            log.severe(e.getMessage());
             throw new JLedgerClientException(e);
         }
         return found;
@@ -179,12 +178,12 @@ final public class LedgerInteractionHelper {
             if (user != null) { // specific user use that
                 transactionProposalRequest.setUserContext(user);
             }
-            log.debug("sending transaction proposal to all peers with arguments:", arguments); //FIXME
+            //log.debug("sending transaction proposal to all peers with arguments:", arguments); //FIXME
             String payload = null;
             Collection<ProposalResponse> invokePropResp = channel.sendTransactionProposal(transactionProposalRequest);
             for (ProposalResponse response : invokePropResp) {
                 if (response.getStatus() == ChaincodeResponse.Status.SUCCESS) {
-                    log.debug("Successful transaction proposal response Txid: %s from peer %s", response.getTransactionID(), response.getPeer().getName());
+                    //      log.debug("Successful transaction proposal response Txid: %s from peer %s", response.getTransactionID(), response.getPeer().getName());
                     successful.add(response);
                     payload = response.getProposalResponse().getResponse().getPayload().toStringUtf8();
                 } else {
@@ -192,23 +191,22 @@ final public class LedgerInteractionHelper {
                 }
             }
 
-            log.debug("Received %d transaction proposal responses. Successful+verified: %d . Failed: %d",
-                    invokePropResp.size(), successful.size(), failed.size());
+            log.fine("Received %d transaction proposal responses. Successful+verified: %d . Failed: %d" + invokePropResp.size() + successful.size() + failed.size());
             if (failed.size() > 0) {
                 ProposalResponse firstTransactionProposalResponse = failed.iterator().next();
 
                 throw new ProposalException(format("Not enough endorsers for invoke(move a,b,%s):%d endorser error:%s. Was verified:%b",
                         arguments, firstTransactionProposalResponse.getStatus().getStatus(), firstTransactionProposalResponse.getMessage(), firstTransactionProposalResponse.isVerified()));
             }
-            log.debug("Successfully received transaction proposal responses.");
+            log.fine("Successfully received transaction proposal responses.");
             // Send transaction to orderer
-            log.debug("Sending chaincode transaction to orderer.", arguments);
+            log.fine("Sending chaincode transaction to orderer." + arguments);
             if (user != null) {
                 return new InvokeReturn(channel.sendTransaction(successful, user), payload);
             }
             return new InvokeReturn(channel.sendTransaction(successful), payload);
         } catch (Exception e) {
-            log.error(e);
+            log.severe(e.getMessage());
             throw new JLedgerClientException(e);
 
         }
@@ -219,12 +217,12 @@ final public class LedgerInteractionHelper {
         try {
             if (null != transactionEvent) {
                 //waitOnFabric(0);
-                log.debug("Finished transaction with transaction id %s", transactionEvent.getTransactionID());
+                //  log.debug("Finished transaction with transaction id %s", transactionEvent.getTransactionID());
                 String testTxID = transactionEvent.getTransactionID(); // used in the channel queries later
             }
             // Send Query Proposal to all peers
             //
-            log.debug("Now query chaincode for the values rquired.");
+            //log.debug("Now query chaincode for the values rquired.");
 
             String[] argsArr = new String[args.size()];
             argsArr = args.toArray(argsArr);
@@ -245,24 +243,24 @@ final public class LedgerInteractionHelper {
             for (ProposalResponse proposalResponse : queryProposals) {
                 if (!proposalResponse.isVerified() || proposalResponse.getStatus() != ProposalResponse.Status
                         .SUCCESS) {
-                    log.debug("Failed query proposal from peer " + proposalResponse.getPeer().getName() + " status: "
-                            + proposalResponse.getStatus() +
-                            ". Messages: " + proposalResponse.getMessage()
-                            + ". Was verified : " + proposalResponse.isVerified());
+                    //      log.debug("Failed query proposal from peer " + proposalResponse.getPeer().getName() + " status: "
+                    //            + proposalResponse.getStatus() +
+                    //            ". Messages: " + proposalResponse.getMessage()
+                    //            + ". Was verified : " + proposalResponse.isVerified());
                     QueryReturn queryReturn = new QueryReturn(proposalResponse.getPeer().getName(), null);
                     queryReturns.add(queryReturn);
                 } else {
                     String payload = proposalResponse.getProposalResponse().getResponse().getPayload()
                             .toStringUtf8();
-                    log.debug("Query payload from peer %s returned %s", proposalResponse.getPeer().getName(),
-                            payload);
+                    //  log.debug("Query payload from peer %s returned %s", proposalResponse.getPeer().getName(),
+                    //          payload);
                     QueryReturn queryReturn = new QueryReturn(proposalResponse.getPeer().getName(), payload);
                     queryReturns.add(queryReturn);
                 }
             }
             return queryReturns;
         } catch (Exception e) {
-            log.error(e);
+            log.severe(e.getMessage());
             throw new JLedgerClientException("Failed during chaincode query with error : " + e.getMessage());
         }
     }

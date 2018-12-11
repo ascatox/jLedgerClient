@@ -17,17 +17,12 @@
 package it.eng.jledgerclient.fabric.utils;
 
 
-import it.eng.jledgerclient.exception.JLedgerClientException;
 import it.eng.jledgerclient.fabric.config.User;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 
-import javax.validation.ConstraintViolation;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -38,16 +33,14 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
-import java.util.HashSet;
-import java.util.Set;
 
 import static java.lang.String.format;
 
 public class Utils {
-    private final static Logger logger = LogManager.getLogger(Utils.class);
+    //private final static Logger logger = LogManager.getLogger(Utils.class);
 
 
-    public static void getMessageViolations(Set<ConstraintViolation<?>> violations) throws JLedgerClientException {
+ /*   public static void getMessageViolations(Set<ConstraintViolation<?>> violations) throws JLedgerClientException {
         if (violations.isEmpty())
             return;
         StringBuilder messageBuilder = new StringBuilder();
@@ -67,7 +60,7 @@ public class Utils {
         }
         if (StringUtils.isNotEmpty(messageBuilder.toString()))
             throw new JLedgerClientException(messageBuilder.toString());
-    }
+    }*/
 
 
     public static File findFileSk(String domainName, User user, String cryptoDir) {

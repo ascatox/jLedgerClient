@@ -5,8 +5,6 @@ import it.eng.jledgerclient.fabric.helper.ChannelInitializationManager;
 import it.eng.jledgerclient.fabric.utils.Utils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric_ca.sdk.Attribute;
 import org.hyperledger.fabric_ca.sdk.HFCAIdentity;
@@ -23,12 +21,13 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * @author ascatox
  */
 public class UserManager {
-    private final static Logger log = LogManager.getLogger(UserManager.class);
+    private final static Logger log = Logger.getLogger(UserManager.class.getName());
 
     private static UserManager instance;
     private Configuration configuration;
@@ -61,7 +60,7 @@ public class UserManager {
             }
         } catch (IOException | NoSuchProviderException | NoSuchAlgorithmException
                 | InvalidKeySpecException | IdentityException | org.hyperledger.fabric_ca.sdk.exception.InvalidArgumentException e) {
-            log.error(e);
+            log.severe(e.getMessage());
             throw new JLedgerClientException(e);
         }
     }
