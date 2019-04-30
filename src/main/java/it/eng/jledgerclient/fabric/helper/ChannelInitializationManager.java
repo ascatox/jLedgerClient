@@ -60,7 +60,6 @@ public class ChannelInitializationManager {
         if (null == getChannel())
             this.channel = client.getChannel(configManager.getConfiguration().getChannelName());
         if (channel == null) {
-            log.warning("Channel " + configManager.getConfiguration().getChannelName() + " not initialized...");
             channel = client.newChannel(configManager.getConfiguration().getChannelName());
         }
     }
