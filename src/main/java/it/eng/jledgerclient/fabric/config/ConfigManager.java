@@ -53,6 +53,7 @@ public class ConfigManager {
         try {
             InputStream resource = configFabricNetwork;
             if (null == resource) {
+                log.warning("ATTENTION CONFIGURATION Problem detected !! Using the DEFAULT config-fabric-network file bundled with this library!");
                 resource = getClass().getResourceAsStream("/config-fabric-network.json");
                 //throw new JLedgerClientException("config-fabric-network.json file missing!!!");
             }
