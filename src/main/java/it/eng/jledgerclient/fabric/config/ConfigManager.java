@@ -54,6 +54,7 @@ public class ConfigManager {
             InputStream resource = configFabricNetwork;
             if (null == resource) {
                 resource = getClass().getResourceAsStream("/config-fabric-network.json");
+                //throw new JLedgerClientException("config-fabric-network.json file missing!!!");
             }
             ObjectMapper objectMapper = new ObjectMapper();
             Configuration configuration = objectMapper.readValue(resource, Configuration.class);

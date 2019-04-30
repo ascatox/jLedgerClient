@@ -13,6 +13,7 @@ import org.hyperledger.fabric.sdk.ChaincodeEventListener;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -58,10 +59,14 @@ public class HLFLedgerClient {
     public String doInvoke(String fcn, List<String> args) throws JLedgerClientException {
         final InvokeReturn invokeReturn = ledgerInteractionHelper.invokeChaincode(fcn, args);
         try {
+            String payload = null;
             log.fine("BEFORE -> Store Completable Future at " + System.currentTimeMillis());
-            invokeReturn.getCompletableFuture().get(configManager.getConfiguration().getTimeout(), TimeUnit.MILLISECONDS);
-            log.fine("AFTER -> Store Completable Future at " + System.currentTimeMillis());
-            final String payload = invokeReturn.getPayload();
+            final CompletableFuture<Object> completedFuture = invokeReturn.getCompletableFuture().completedFuture("message");
+            //get(configManager.getConfiguration().getTimeout(), TimeUnit.MILLISECONDS);
+            if(completedFuture.isDone()) {
+                log.fine("AFTER -> Store Completable Future at " + System.currentTimeMillis());
+                payload = invokeReturn.getPayload();
+            }
             return payload;
         } catch (Exception e) {
             log.severe(fcn.toUpperCase() + " " + e.getMessage());
