@@ -61,12 +61,11 @@ public class HLFLedgerClient {
         try {
             String payload = null;
             log.fine("BEFORE -> Store Completable Future at " + System.currentTimeMillis());
-            final CompletableFuture<Object> completedFuture = invokeReturn.getCompletableFuture().completedFuture("message");
-            //get(configManager.getConfiguration().getTimeout(), TimeUnit.MILLISECONDS);
-            if(completedFuture.isDone()) {
-                log.fine("AFTER -> Store Completable Future at " + System.currentTimeMillis());
-                payload = invokeReturn.getPayload();
-            }
+            // final CompletableFuture<Object> completedFuture = invokeReturn.getCompletableFuture().completedFuture("message");
+            // get(configManager.getConfiguration().getTimeout(), TimeUnit.MILLISECONDS);
+            // if(completedFuture.isDone()) {
+             payload = invokeReturn.getPayload();
+            // }
             return payload;
         } catch (Exception e) {
             log.severe(fcn.toUpperCase() + " " + e.getMessage());
